@@ -1,15 +1,25 @@
 """AI Data Analyst Assistant -- Streamlit chat app over Olist e-commerce data."""
 import random
 import sqlite3
+from pathlib import Path
 
 import pandas as pd
 import streamlit as st
 
-from src import rag_agent, sql_agent
+from src import data_files, rag_agent, sql_agent
 from src.llm import MODEL as GROQ_MODEL
 from src.router import route
 
 st.set_page_config(page_title="Orders & Opinions", page_icon="📊", layout="wide")
+
+# ponytail: processed data (DB + FAISS index) is too large for git, so it's hosted as a
+# GitHub Release asset and pulled down once on first run. Re-download after every Streamlit
+# Cloud reboot; move to persistent storage if that first-load delay becomes a problem.
+_DATA_DIR = Path(__file__).resolve().parent / "data" / "processed"
+_missing = data_files.missing_files(_DATA_DIR)
+if _missing:
+    with st.spinner(f"Downloading data files ({', '.join(_missing)})..."):
+        data_files.download_missing(_DATA_DIR)
 
 USER_AVATAR = "🧑‍💻"
 ASSISTANT_AVATAR = "📊"
