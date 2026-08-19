@@ -9,6 +9,8 @@ Each question is routed automatically to one of two pipelines:
 
 Every answer comes with a "how I got this" panel showing the exact SQL query run, or the review excerpts retrieved.
 
+**Try it live:** _deploy on [Streamlit Community Cloud](https://share.streamlit.io) and drop the URL here._
+
 ## Architecture
 
 ```
